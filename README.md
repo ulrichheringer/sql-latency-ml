@@ -1,12 +1,12 @@
 # sql-latency-ml
 
-Estima latência aproximada de SQL com regressão sobre estimativas e características estruturais da consulta.
+Estimates SQL query runtime from query structure and estimated row counts.
 
-## Dados
+## Data
 
-O pipeline gera dados sintéticos determinísticos localmente, identificados como sintéticos em `pipeline.py`. Nenhum dado privado ou download externo é necessário. A divisão e a semente de avaliação são descritas junto às métricas abaixo.
+Deterministic synthetic data is generated locally in `pipeline.py`. No private data or external download is required.
 
-## Instalação e execução
+## Install and run
 
 ```bash
 python -m venv .venv
@@ -18,8 +18,10 @@ python cli.py train --model model.joblib
 python cli.py predict --model model.joblib
 ```
 
-## Métricas obtidas
+## Evaluation results
 
-Seed 42: holdout aleatório de 450 consultas sintéticas — MAE **17,1671 ms**, RMSE **21,8282 ms**, R² **0,9773**. A latência foi gerada por uma fórmula conhecida sobre linhas estimadas e estrutura SQL, por isso o resultado não representa um mecanismo de banco real. Sem `estimated_rows` no input ou comentário SQL, a extração usa 1.000 como valor padrão.
+With seed 42, a random holdout of 450 synthetic queries had an MAE of 17.1671 ms, an RMSE of 21.8282 ms, and an R² of 0.9773. The generated latency follows a known formula based on estimated rows and query structure, so the result does not represent a real database engine. If no row estimate is supplied in the input or SQL comment, the parser uses 1,000.
 
-Limitação: dados e regras de geração simplificados; antes de uso real, substitua-os por dados com licença e proveniência adequadas e valide fora da amostra.
+## Limitations
+
+The generated runtimes are not database measurements. Real use would require query plans and execution timings from the target database, evaluated on queries that were not used for training.
